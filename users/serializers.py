@@ -7,7 +7,7 @@ from .models import User
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["email", "password", "first_name", "last_name", "address", "image"]
+        fields = ["email", "password", "first_name", "last_name", "phone_number", "image"]
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
@@ -62,3 +62,12 @@ class UserPasswordChangeSerializer(serializers.Serializer):
             return "Invalid password"
         user.save()
         return user
+
+
+class SendEmailVerificationCodeSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class CheckEmailVerificationCodeSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    code = serializers.CharField(min_length=6, max_length=6)
