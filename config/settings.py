@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
+import environ
+from django.utils.translation import gettext_lazy as _
+
+env = environ.Env(DEBUG=(bool, False))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,7 +43,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
 
-    'users'
+    'users',
+    'resume',
+    'vacancy',
 ]
 
 MIDDLEWARE = [
@@ -144,9 +150,20 @@ SITE_ID = 1
 REST_USE_JWT = True
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
-    "REFRESH_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(minutes=40),
     "UPDATE_LAST_LOGIN": True,
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
 REST_AUTH = {"USE_JWT": True}
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env("EMAIL_HOST", default="email_host")
+EMAIL_PORT = env("EMAIL_PORT", default="email_port")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="email_user")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="email_pass")
+EMAIL_USE_TLS = True
+
+AUTHENTICATION_BACKENDS = ["users.backends.CustomModelBackend"]
+# SMS_EMAIL = env("SMS_EMAIL")
+# SMS_KEY = env("SMS_KEY")

@@ -1,6 +1,11 @@
+from datetime import timedelta
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.utils.translation import gettext_lazy as _
+
+from utils.regex import phone_regex
 
 
 class UserManager(BaseUserManager):
@@ -20,10 +25,18 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
+    username = models.CharField(max_length=32, null=True, blank=True)
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
-    address = models.CharField(max_length=55, blank=True, null=True)
+    phone_number = models.CharField(
+        validators=[phone_regex],
+        max_length=15,
+        # unique=True,
+        error_messages={
+            "unique": _("A user with that phone number already exists."),
+        },
+    )
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -52,3 +65,22 @@ class User(AbstractBaseUser):
     def full_name(self):
         full_name = "%s %s" % (self.first_name, self.last_name)
         return full_name.strip()
+
+
+class VerificationCode(models.Model):
+    code = models.CharField(max_length=6)
+    user = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, related_name="verification_codes", null=True, blank=True
+    )
+    email = models.EmailField(unique=True, null=True)
+    last_sent_time = models.DateTimeField(auto_now=True)
+    is_verified = models.BooleanField(default=False)
+    expired_at = models.DateTimeField(null=True)
+
+    def __str__(self):
+        return self.email
+
+
+    @property
+    def is_expire(self):
+        return self.expired_at < self.last_sent_time + timedelta(seconds=30)
