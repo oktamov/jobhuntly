@@ -1,33 +1,27 @@
 from datetime import timedelta
 
 from django.conf import settings
-from django.contrib.auth import login, logout
 from django.core.mail import send_mail
-from django.urls import reverse
 from django.utils.crypto import get_random_string
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from .models import User, VerificationCode
-from .serializers import UserLoginSerializer, UserPasswordChangeSerializer, UserRegisterSerializer, \
-    SendEmailVerificationCodeSerializer, CheckEmailVerificationCodeSerializer
-
-
-class UserCreateView(generics.CreateAPIView):
-    queryset = User
-    serializer_class = UserRegisterSerializer
-
 
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import status
 
-from .serializers import UserLoginSerializer
+from .models import User, VerificationCode
+from .serializers import UserLoginSerializer, UserRegisterSerializer, \
+    SendEmailVerificationCodeSerializer, CheckEmailVerificationCodeSerializer
+
+
+class UserCreateView(generics.CreateAPIView):
+    queryset = User
+    serializer_class = UserRegisterSerializer
 
 
 class UserLoginView(CreateAPIView):
@@ -93,6 +87,7 @@ class CheckEmailVerificationCodeView(CreateAPIView):
         verification_code.is_verified = True
         verification_code.save(update_fields=["is_verified"])
         return Response({"detail": "Verification code is verified."})
+
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
