@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'vacancy',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -171,3 +170,4 @@ EMAIL_USE_TLS = True
 AUTHENTICATION_BACKENDS = ["users.backends.CustomModelBackend"]
 # SMS_EMAIL = env("SMS_EMAIL")
 # SMS_KEY = env("SMS_KEY")
+CORS_ALLOW_ALL_ORIGINS = True
