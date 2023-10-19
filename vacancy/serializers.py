@@ -23,9 +23,6 @@ class VacancySerializer(serializers.ModelSerializer):
 
 
 class VacancyListSerializer(serializers.ModelSerializer):
-    skills = SkillNameSerializer(many=True, read_only=True)
-    user = UserRegisterSerializer(read_only=True)
-
     class Meta:
         model = Vacancy
         fields = (
