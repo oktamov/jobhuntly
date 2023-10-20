@@ -160,11 +160,11 @@ SIMPLE_JWT = {
 
 REST_AUTH = {"USE_JWT": True}
 
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = env("EMAIL_HOST", default="email_host")
-EMAIL_PORT = env("EMAIL_PORT", default="email_port")
-EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="email_user")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="email_pass")
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'mr006developer@gmail.com'
+EMAIL_HOST_PASSWORD = 'ljueffebuzpkuxxs'
 EMAIL_USE_TLS = True
 
 AUTHENTICATION_BACKENDS = ["users.backends.CustomModelBackend"]
