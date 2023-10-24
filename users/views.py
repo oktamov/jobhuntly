@@ -42,8 +42,8 @@ class UserLoginView(CreateAPIView):
                     'email': user.email,
                     'first_name': user.first_name,
                     'last_name': user.last_name,
-                    'phone_number': user.phone_number,
-                    'image': user.image
+                    'phone_number': user.phone_number
+                    
                 },
                 'tokens': tokens
             }, status=status.HTTP_200_OK)
