@@ -6,7 +6,7 @@ from .serializers import VacancySerializer, VacancyListSerializer, VacancyCreate
 
 class VacancyListView(generics.ListAPIView):
     queryset = Vacancy.objects.all()
-    serializer_class = VacancyListSerializer
+    serializer_class = VacancySerializer
 
 
 class VacancyDetailView(generics.RetrieveUpdateDestroyAPIView):

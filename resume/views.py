@@ -7,7 +7,7 @@ from resume.serializers import EmployeeSerializer, EmployeeListSerializer, Emplo
 
 class EmployeeListView(generics.ListAPIView):
     queryset = Employee.objects.all()
-    serializer_class = EmployeeListSerializer
+    serializer_class = EmployeeSerializer
 
 
 class EmployeeDetailView(generics.RetrieveUpdateDestroyAPIView):
