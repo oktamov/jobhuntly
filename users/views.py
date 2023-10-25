@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import status
 
+from custom_permission import IsOwnerOrReadOnly
 from .models import User, VerificationCode
 from .serializers import UserLoginSerializer, UserRegisterSerializer, \
     SendEmailVerificationCodeSerializer, CheckEmailVerificationCodeSerializer
@@ -57,7 +58,7 @@ class SendEmailVerificationCodeView(APIView):
         serializer = SendEmailVerificationCodeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data.get("email")
-        code = get_random_string(allowed_chars="0123456789", length=6)
+        code = get_random_string(allowed_chars="0123456789", length=4)
         verification_code, _ = VerificationCode.objects.update_or_create(
             email=email, defaults={"code": code, "is_verified": False}
         )
@@ -88,7 +89,7 @@ class CheckEmailVerificationCodeView(CreateAPIView):
 
 
 class ProfileView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get(self, request, *args, **kwargs):
         serializer = UserRegisterSerializer(request.user)
