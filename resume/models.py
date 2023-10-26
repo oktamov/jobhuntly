@@ -38,8 +38,8 @@ class Experience(models.Model):
 
     employee = models.ForeignKey(Employee, related_name="experiences", on_delete=models.CASCADE)
     company = models.CharField(max_length=255)
-    start_year = models.PositiveIntegerField()
-    end_year = models.PositiveIntegerField()
+    start_year = models.CharField(max_length=255)
+    end_year = models.CharField(max_length=255)
     work_type = models.CharField(max_length=100, choices=Type.choices, default=Type.Full)
     location = models.CharField(max_length=100, choices=Location.choices, default=Location.On_site)
     description = models.CharField(max_length=255)
