@@ -14,7 +14,7 @@ class EmployeeListView(generics.ListAPIView):
 class EmployeeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
-    permission_classes = IsOwnerOrReadOnly
+    permission_classes = [IsOwnerOrReadOnly]
 
 
 class EmployeeCreateView(generics.CreateAPIView):

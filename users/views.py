@@ -89,7 +89,7 @@ class CheckEmailVerificationCodeView(CreateAPIView):
 
 
 class ProfileView(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         serializer = UserRegisterSerializer(request.user)
