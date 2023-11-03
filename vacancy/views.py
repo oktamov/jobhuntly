@@ -13,7 +13,7 @@ class VacancyListView(generics.ListAPIView):
 class VacancyDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Vacancy.objects.all()
     serializer_class = VacancySerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    # permission_classes = [IsOwnerOrReadOnly]
 
 
 class VacancyCreateView(generics.CreateAPIView):
