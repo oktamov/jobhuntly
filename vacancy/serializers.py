@@ -63,7 +63,7 @@ class VacancyCreateSerializer(serializers.ModelSerializer):
     vacancy = super().create(validated_data)
 
     # Add the list of Skill objects to the vacancy.skills relationship
-    vacancy.skills.set(skills)
+    vacancy.skills.add(*skills)
 
     return vacancy
 
