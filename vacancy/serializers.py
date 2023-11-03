@@ -48,15 +48,25 @@ class VacancyCreateSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        user = self.context['request'].user
-        validated_data['user'] = user
-        skills_data = validated_data.pop('skills')
-        vacancy = super().create(validated_data)
-        skills = [Skill.objects.get_or_create(name=skill_name)[0] for skill_name in skills_data]
+    user = self.context['request'].user
+    validated_data['user'] = user
+    skills_data = validated_data.pop('skills')
 
-        vacancy.skills.add(*skills)
+    # Create a list to hold the Skill objects
+    skills = []
 
-        return vacancy
+    for skill_name in skills_data:
+        # Check if the Skill with the given name exists, and create it if not
+        skill, created = Skill.objects.get_or_create(name=skill_name)
+        skills.append(skill)
+
+    vacancy = super().create(validated_data)
+
+    # Add the list of Skill objects to the vacancy.skills relationship
+    vacancy.skills.set(skills)
+
+    return vacancy
+
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
