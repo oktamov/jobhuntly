@@ -6,6 +6,9 @@ from users.models import User
 class Skill(models.Model):
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
 
 class Employee(models.Model):
     class Gender(models.TextChoices):

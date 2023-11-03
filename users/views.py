@@ -81,8 +81,9 @@ class CheckEmailVerificationCodeView(CreateAPIView):
         verification_code = (
             self.get_queryset().filter(email=email, is_verified=False).order_by("-last_sent_time").first()
         )
-        if verification_code and verification_code.code != code and verification_code.is_expire:
+        if verification_code and verification_code.code != code and not verification_code.is_expire:
             raise ValidationError("Verification code invalid.")
+
         verification_code.is_verified = True
         verification_code.save(update_fields=["is_verified"])
         return Response({"detail": "Verification code is verified."})

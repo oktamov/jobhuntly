@@ -32,45 +32,10 @@ class VacancyListSerializer(serializers.ModelSerializer):
 
 
 class VacancyCreateSerializer(serializers.ModelSerializer):
-    skills = serializers.ListField(child=serializers.CharField(max_length=200))
-    # skills = serializers.SlugRelatedField(
-    #     slug_field='name',
-    #     queryset=Skill.objects.all(),
-    #     many=True,
-    #     required=False
-    # )
-
     class Meta:
         model = Vacancy
         fields = (
-            'id', 'title', 'company', 'company_logo', 'experience', 'level', 'job_type',
-            'salary', 'overview', 'description', 'offer', 'skills', 'created_at'
+            'id', 'title', 'company', 'experience', 'level', 'job_type',
+            'salary', 'overview', 'description', 'offer',
         )
-
-    def create(self, validated_data):
-    user = self.context['request'].user
-    validated_data['user'] = user
-    skills_data = validated_data.pop('skills')
-
-    # Create a list to hold the Skill objects
-    skills = []
-
-    for skill_name in skills_data:
-        # Check if the Skill with the given name exists, and create it if not
-        skill, created = Skill.objects.get_or_create(name=skill_name)
-        skills.append(skill)
-
-    vacancy = super().create(validated_data)
-
-    # Add the list of Skill objects to the vacancy.skills relationship
-    vacancy.skills.add(*skills)
-
-    return vacancy
-
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data["skills"] = [skill.name for skill in instance.skills.all()]
-        return data
-
 
