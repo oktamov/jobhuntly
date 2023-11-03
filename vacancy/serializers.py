@@ -32,13 +32,13 @@ class VacancyListSerializer(serializers.ModelSerializer):
 
 
 class VacancyCreateSerializer(serializers.ModelSerializer):
-    # skills = serializers.ListField(child=serializers.CharField(max_length=200))
-    skills = serializers.SlugRelatedField(
-        slug_field='name',
-        queryset=Skill.objects.all(),
-        many=True,
-        required=False
-    )
+    skills = serializers.ListField(child=serializers.CharField(max_length=200))
+    # skills = serializers.SlugRelatedField(
+    #     slug_field='name',
+    #     queryset=Skill.objects.all(),
+    #     many=True,
+    #     required=False
+    # )
 
     class Meta:
         model = Vacancy
@@ -53,6 +53,7 @@ class VacancyCreateSerializer(serializers.ModelSerializer):
         skills_data = validated_data.pop('skills')
         vacancy = super().create(validated_data)
         skills = [Skill.objects.get_or_create(name=skill_name)[0] for skill_name in skills_data]
+
         vacancy.skills.add(*skills)
 
         return vacancy
